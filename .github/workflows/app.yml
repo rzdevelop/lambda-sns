@@ -1,0 +1,37 @@
+name: "Serverless Deploy"
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/app.yml"
+      - "src/**"
+      - "serverless.ts"
+      - "package.json"
+
+# env:
+
+jobs:
+  serverless:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Installing dependencies
+        run: |
+          npm i -g serverless
+          npm ci --only-prod
+      - name: Serverless deploy
+        run: serverless deploy -v
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          # ENV_NAME: ${{ needs.check.outputs.branch }}

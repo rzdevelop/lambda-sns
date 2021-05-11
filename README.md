@@ -1,3 +1,7 @@
+# lambda-sns
+
+Minimal code to deploy serverless function that receives a POST request and send the body to an SNS Topic
+
 # Serverless - AWS Node.js Typescript
 
 This project has been generated using the `aws-nodejs-typescript` template from the [Serverless framework](https://www.serverless.com/).
